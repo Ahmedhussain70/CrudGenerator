@@ -1,13 +1,13 @@
 {
-  "name": "ahmed-hussain70/crud-generator",
+  "name": "Ahmedhussain70/CrudGenerator",
   "description": "A simple CRUD generator for Laravel",
   "type": "library",
   "require": {
-      "ahmed-hussain70/crud-generator": "dev-main"
+      "Ahmedhussain70/CrudGenerator": "dev-main"
   },
   "autoload": {
       "psr-4": {
-          "ahmed-hussain\\crud-generator\\": "src/"
+          "Ahmedhussain70\\crud-generator\\": "src/"
       }
   },
   "extra": {
