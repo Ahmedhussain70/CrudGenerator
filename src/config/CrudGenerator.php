@@ -50,7 +50,7 @@ return [
     ],
 
     'providors' => [
-        AhmedHussain70\CrudGenerator\CrudGeneratorServiceProvider::class,
+        ahmed-hussain70\crud-generator\CrudGeneratorServiceProvider::class,
     ]
 
 ];
