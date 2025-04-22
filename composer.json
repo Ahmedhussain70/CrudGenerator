@@ -1,0 +1,28 @@
+{
+  "name": "ahmed-hussain/crud-generator",
+  "description": "A simple CRUD generator for Laravel",
+  "type": "library",
+  "require": {
+      "php": "^8.2",
+      "illuminate/support": "^8.0|^9.0|^10.0"
+  },
+  "autoload": {
+      "psr-4": {
+          "ahmed-hussain\\crud-generator\\": "src/"
+      }
+  },
+  "extra": {
+      "laravel": {
+          "providers": [
+              "ahmed-hussain\\crud-generator\\CrudGeneratorServiceProvider"
+          ]
+      }
+  },
+  "scripts": {
+      "post-install-cmd": [
+          "php artisan vendor:publish --provider=\"ahmed-hussain\\crud-generator\\CrudGeneratorServiceProvider\""
+      ]
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true
+}

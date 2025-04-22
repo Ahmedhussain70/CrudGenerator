@@ -1,0 +1,59 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\{{modelName}};
+use App\Http\Requests\{{modelName}}Request;
+use App\Http\Services\{{modelName}}Service;
+use App\Http\Responses\Response;
+
+class {{modelName}}Controller extends Controller
+{
+    protected $service;
+
+    public function __construct({{modelName}}Service $service)
+    {
+        $this->service = $service;
+    }
+
+    public function index()
+    {
+        $data = $this->service->index();
+        Response::success($data);
+    }
+
+    public function store({{modelName}}Request $request)
+    {
+        $data = $this->service->store($request);
+        Response::success(201, $data, "Created Successfully!");
+    }
+
+    public function show({{modelName}} ${{modelVariable}})
+    {
+        $data = $this->service->show(${{modelVariable}});
+        Response::success($data);
+    }
+
+    public function update({{modelName}}Request $request, $id)
+    {
+        $data = $this->service->update($request, $id);
+        Response::success($data, "Updated Successfully!");
+    }
+
+    public function destroy({{modelName}} ${{modelVariable}})
+    {
+        $this->service->destroy(${{modelVariable}});
+        Response::success(204, null, "Deleted Successfully!");
+    }
+
+    public function delete($id)
+    {
+        $data = $this->service->delete($id);
+
+        if (!$data) {
+            Response::error(404, "{{modelName}} not found!");
+        }
+
+        Response::success($data, "Soft deleted successfully.");
+    }
+}

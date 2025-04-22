@@ -1,0 +1,54 @@
+<?php
+
+namespace App\Http\Services;
+
+use App\Models\{{modelName}};
+use App\Http\Requests\{{modelName}}Request;
+
+class {{modelName}}Service
+{
+    public function index()
+    {
+        return {{modelName}}::all();
+    }
+
+    public function store({{modelName}}Request $request)
+    {
+        $data = $request->validate($request->rules());
+        return {{modelName}}::create($data);
+    }
+
+    public function show({{modelName}} ${{modelVariable}})
+    {
+        return ${{modelVariable}};
+    }
+
+    public function update({{modelName}}Request $request, ${{modelVariable}}_id)
+    {
+        $data = $request->validate($request->rules());
+        ${{modelVariable}} = {{modelName}}::findOrFail(${{modelVariable}}_id);
+        ${{modelVariable}}->update($data);
+
+        return ${{modelVariable}};
+    }
+
+    public function destroy({{modelName}} ${{modelVariable}})
+    {
+        return ${{modelVariable}}->delete();
+    }
+
+    public function delete($id)
+    {
+        ${{modelVariable}} = {{modelName}}::find($id);
+
+        if (!${{modelVariable}}) {
+            return null;
+        }
+
+        ${{modelVariable}}->deleted = request()->deleted ?? "1";
+        ${{modelVariable}}->delstamp = now();
+        ${{modelVariable}}->save();
+
+        return ${{modelVariable}};
+    }
+}
