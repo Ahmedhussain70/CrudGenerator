@@ -60,7 +60,7 @@ class MakeRepoCrud extends Command
             compact('name', 'modelVariable', 'tableName')
         );
 
-        // Add route
+        // Add Route
         $routeEntry = "Route::resource('$routeName', \\App\\Http\\Controllers\\{$name}Controller::class);";
 
         $file = base_path('routes/api.php');
@@ -71,6 +71,19 @@ class MakeRepoCrud extends Command
         }else{
             $this->warn("Route is exist in api.php");
         }
+
+        // Add Exceptions
+        $this->generateFile(
+            "$basePath/Exceptions/handler.stub",
+            app_path("Exceptions/Handler.php"),
+            ""
+        );
+
+        $this->generateFile(
+            "$basePath/Exceptions/response.stub",
+            app_path("Exceptions/Response.php"),
+            ""
+        );
 
         $this->info("CRUD for $name generated successfully!");
     }

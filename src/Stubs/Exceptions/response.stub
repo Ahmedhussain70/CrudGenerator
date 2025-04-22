@@ -1,0 +1,30 @@
+<?php
+
+namespace App\Exceptions;
+
+use Exception;
+
+class Response extends Exception
+{
+    public int $status = 0;
+    public ?string $error = null;
+    public mixed $data = null;
+
+    public function __construct(int $status, ?string $message = null, mixed $data = null)
+    {
+        $this->status = $status;
+        $this->data = $data;
+        parent::__construct($message, $status);
+        throw $this;
+    }
+
+    public static function success(int $status = 200, ?string $message = null, mixed $data = null)
+    {
+        return new self($status, $message, $data);
+    }
+
+    public static function error(int $status, ?string $error = null, mixed $data = null)
+    {
+        return new self($status, $error, $data);
+    }
+}

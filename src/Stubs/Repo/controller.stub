@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\{{modelName}};
 use App\Http\Requests\{{modelName}}Request;
 use App\Http\Services\{{modelName}}Service;
-use App\Http\Responses\Response;
+use App\Exceptions\Response;
 
 class {{modelName}}Controller extends Controller
 {
@@ -19,7 +19,7 @@ class {{modelName}}Controller extends Controller
     public function index()
     {
         $data = $this->service->index();
-        Response::success($data);
+        Response::success(200,"",$data);
     }
 
     public function store({{modelName}}Request $request)
@@ -31,7 +31,7 @@ class {{modelName}}Controller extends Controller
     public function show({{modelName}} ${{modelVariable}})
     {
         $data = $this->service->show(${{modelVariable}});
-        Response::success($data);
+        Response::success(200,"",$data);
     }
 
     public function update({{modelName}}Request $request, $id)
