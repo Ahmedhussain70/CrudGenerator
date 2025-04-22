@@ -1,26 +1,34 @@
 {
-  "name": "Ahmedhussain70/CrudGenerator",
+  "name": "ahmed-hussain70/crud-generator",
   "description": "A simple CRUD generator for Laravel",
   "type": "library",
+  "license": "MIT",
   "require": {
-      "Ahmedhussain70/CrudGenerator": "dev-main"
+    "php": "^8.2",
+    "ahmed-hussain70/crud-generator": "dev-main"
   },
   "autoload": {
-      "psr-4": {
-          "Ahmedhussain70\\crud-generator\\": "src/"
-      }
+    "psr-4": {
+      "CrudGenerator\\": "src/"
+    }
   },
+  "repositories": [
+    {
+      "type": "path",
+      "url": "./packages/crud-generator"
+    }
+  ],
   "extra": {
-      "laravel": {
-          "providers": [
-              "Ahmedhussain70\\CrudGenerator\\CrudGeneratorServiceProvider"
-          ]
-      }
+    "laravel": {
+      "providers": [
+        "ahmed-hussain70\\crud-generator\\CrudGeneratorServiceProvider"
+      ]
+    }
   },
   "scripts": {
-      "post-install-cmd": [
-          "php artisan vendor:publish --provider=\"Ahmedhussain70\\CrudGenerator\\CrudGeneratorServiceProvider\""
-      ]
+    "post-install-cmd": [
+      "php artisan vendor:publish --provider=\"ahmed-hussain70\\crud-generator\\CrudGeneratorServiceProvider\""
+    ]
   },
   "minimum-stability": "stable",
   "prefer-stable": true
