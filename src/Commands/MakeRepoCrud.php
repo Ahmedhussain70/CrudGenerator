@@ -20,7 +20,7 @@ class MakeRepoCrud extends Command
 
         $this->info("Generating CRUD for: $name");
 
-        $basePath = base_path('vendor\CrudGenerator\src\Stubs');
+        $basePath = base_path('vendor\ahmed-hussain70\crud-generator\src\Stubs');
 
         if(file_exists($name)){
             $this->warn("Name is already exist");
