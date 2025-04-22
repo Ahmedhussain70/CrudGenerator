@@ -49,4 +49,8 @@ return [
         'level' => 'info',
     ],
 
+    'providors' => [
+        ahmed-hussain70\crud-generator\CrudGeneratorServiceProvider::class,
+    ]
+
 ];
