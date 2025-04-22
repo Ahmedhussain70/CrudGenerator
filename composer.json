@@ -4,32 +4,21 @@
   "type": "library",
   "license": "MIT",
   "require": {
-    "php": "^8.2",
-    "ahmed-hussain70/crud-generator": "dev-main"
+    "php": "^8.1",
+    "illuminate/support": "^10.0|^11.0"
   },
   "autoload": {
     "psr-4": {
       "CrudGenerator\\": "src/"
     }
   },
-  "repositories": [
-    {
-      "type": "path",
-      "url": "./crud-generator"
-    }
-  ],
   "extra": {
     "laravel": {
       "providers": [
-        "ahmed-hussain70\\crud-generator\\CrudGeneratorServiceProvider"
+        "CrudGenerator\\CrudGeneratorServiceProvider"
       ]
     }
   },
-  "scripts": {
-    "post-install-cmd": [
-      "php artisan vendor:publish --provider=\"ahmed-hussain70\\crud-generator\\CrudGeneratorServiceProvider\""
-    ]
-  },
-  "minimum-stability": "stable",
+  "minimum-stability": "dev",
   "prefer-stable": true
 }
