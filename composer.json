@@ -13,13 +13,13 @@
   "extra": {
       "laravel": {
           "providers": [
-              "ahmed-hussain70\\crud-generator\\CrudGeneratorServiceProvider"
+              "ahmed-hussain70\\crud-generator\\src\\CrudGeneratorServiceProvider"
           ]
       }
   },
   "scripts": {
       "post-install-cmd": [
-          "php artisan vendor:publish --provider=\"ahmed-hussain70\\crud-generator\\CrudGeneratorServiceProvider\""
+          "php artisan vendor:publish --provider=\"ahmed-hussain70\\crud-generator\\src\\CrudGeneratorServiceProvider\""
       ]
   },
   "minimum-stability": "stable",
