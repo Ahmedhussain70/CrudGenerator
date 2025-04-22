@@ -33,7 +33,7 @@ return [
     |
     */
 
-    'api_url' => env('YOUR_PACKAGE_API_URL', 'https://api.example.com'),
+    'api_url' => env('YOUR_PACKAGE_API_URL', ''),
 
     /*
     |--------------------------------------------------------------------------
