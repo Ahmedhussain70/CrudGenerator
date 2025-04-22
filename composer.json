@@ -1,5 +1,5 @@
 {
-  "name": "ahmed-hussain/crud-generator",
+  "name": "ahmed-hussain70/crud-generator",
   "description": "A simple CRUD generator for Laravel",
   "type": "library",
   "require": {
@@ -14,13 +14,13 @@
   "extra": {
       "laravel": {
           "providers": [
-              "ahmed-hussain\\crud-generator\\CrudGeneratorServiceProvider"
+              "ahmed-hussain70\\crud-generator\\CrudGeneratorServiceProvider"
           ]
       }
   },
   "scripts": {
       "post-install-cmd": [
-          "php artisan vendor:publish --provider=\"ahmed-hussain\\crud-generator\\CrudGeneratorServiceProvider\""
+          "php artisan vendor:publish --provider=\"ahmed-hussain70\\crud-generator\\CrudGeneratorServiceProvider\""
       ]
   },
   "minimum-stability": "stable",
