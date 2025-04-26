@@ -34,11 +34,24 @@ class MakeRepoCrud extends Command
 
         // Controller
         $this->generateFile(
-            "$basePath/Repo/controller.stub",
+            "$basePath/Repo_pattern/controller.stub",
             app_path("Http/Controllers/{$name}Controller.php"),
             compact('name', 'modelVariable', 'tableName')
         );
 
+
+        // Repositories
+        $folderPath = app_path('Http/Repositories');
+
+        if (!file_exists($folderPath)) {
+            mkdir($folderPath, 0777, true);
+        }
+
+        $this->generateFile(
+            "$basePath/Repo_pattern/Repository.stub",
+            "$folderPath/{$name}.php",
+            compact('name', 'modelVariable', 'tableName')
+        );
 
         // Services
         $folderPath = app_path('Http/Services');
@@ -48,7 +61,7 @@ class MakeRepoCrud extends Command
         }
 
         $this->generateFile(
-            "$basePath/Repo/service.stub",
+            "$basePath/Repo_pattern/service.stub",
             "$folderPath/{$name}.php",
             compact('name', 'modelVariable', 'tableName')
         );
@@ -88,7 +101,7 @@ class MakeRepoCrud extends Command
         $this->info("CRUD for $name generated successfully!");
     }
 
-    protected function generateFile($stubPath, $destinationPath, $replacements)
+    protected function generateFile($stubPath, $toPath, $replacements)
     {
         if (!File::exists($stubPath)) {
             $this->error("Stub not found: $stubPath");
@@ -103,7 +116,7 @@ class MakeRepoCrud extends Command
             $stub
         );
 
-        File::put($destinationPath, $stub);
-        $this->info("Created: " . str_replace(base_path() . '/', '', $destinationPath));
+        File::put($toPath, $stub);
+        $this->info("Created: " . str_replace(base_path() . '/', '', $toPath));
     }
 }

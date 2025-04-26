@@ -1,0 +1,37 @@
+<?php
+
+namespace App\Repositories;
+
+use App\Models\{{modelName}}Model;
+
+class {{modelName}}Repository
+{
+    public function all()
+    {
+        return {{modelName}}Model::all();
+    }
+
+    public function find($id)
+    {
+        return {{modelName}}Model::findOrFail($id);
+    }
+
+    public function create(array $data)
+    {
+        return {{modelName}}Model::create($data);
+    }
+
+    public function update($id, array $data)
+    {
+        ${{modelVariable}} = $this->find($id);
+        ${{modelVariable}}->update(array_merge($data, ['updated_at' => now()]));
+        return ${{modelVariable}};
+    }
+
+    public function delete($id)
+    {
+        ${{modelVariable}} = $this->find($id);
+
+        return ${{modelVariable}}->delete();
+    }
+}

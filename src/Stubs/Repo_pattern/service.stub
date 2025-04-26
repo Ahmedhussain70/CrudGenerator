@@ -1,0 +1,41 @@
+<?php
+
+namespace App\Services;
+
+use App\DTO\{{modelName}}RequestData;
+use App\Repositories\{{modelName}}Repository;
+
+class {{modelName}}Service
+{
+    protected $repo;
+
+    public function __construct({{modelName}}Repository $repo)
+    {
+        $this->repo = $repo;
+    }
+
+    public function getAll{{modelName}}()
+    {
+        return $this->repo->all();
+    }
+
+    public function get{{modelName}}($id)
+    {
+        return $this->repo->find($id);
+    }
+
+    public function create{{modelName}}({{modelName}}RequestData $data)
+    {
+        return $this->repo->create($data->toArray());
+    }
+
+    public function update{{modelName}}($id, {{modelName}}RequestData $data)
+    {
+        return $this->repo->update($id, $data->toArray());
+    }
+
+    public function delete{{modelName}}($id)
+    {
+        return $this->repo->delete($id);
+    }
+}

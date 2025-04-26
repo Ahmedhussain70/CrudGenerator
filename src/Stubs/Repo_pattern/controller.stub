@@ -40,20 +40,9 @@ class {{modelName}}Controller extends Controller
         Response::success($data, "Updated Successfully!");
     }
 
-    public function destroy({{modelName}} ${{modelVariable}})
-    {
-        $this->service->destroy(${{modelVariable}});
-        Response::success(204, null, "Deleted Successfully!");
-    }
-
     public function delete($id)
     {
         $data = $this->service->delete($id);
-
-        if (!$data) {
-            Response::error(404, "{{modelName}} not found!");
-        }
-
-        Response::success($data, "Soft deleted successfully.");
+        Response::success($data, "{{modelName}} deleted successfully.");
     }
 }
