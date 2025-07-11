@@ -13,7 +13,7 @@ class MakeRepoCrud extends Command
     public function handle()
     {
         $name = Str::studly($this->argument('name'));
-        $modelVariable = Str::camel($name);
+        $modelName = Str::camel($name);
         $tableName = Str::snake(Str::pluralStudly($name));
         $routeName = Str::kebab(Str::pluralStudly($name));
         $viewFolder = $routeName;
@@ -25,22 +25,63 @@ class MakeRepoCrud extends Command
         if(file_exists($name)){
             $this->warn("Name is already exist");
         }
+
+        $context = compact('name', 'modelName', 'tableName', 'routeName', 'viewFolder');
+
         // Model
+        $this->addModel($basePath, $name, $context);
+
+        // Controller
+        $this->addController($basePath, $name, $context);
+
+        // Repositories
+        $this->addRepository($basePath, $name, $context);
+
+        // Services
+        $this->addService($basePath, $name, $context);
+
+        // Requests
+        $this->addRequest($basePath, $name, $context);
+
+        // Add Route
+        $this->addAPIRoute($routeName);
+
+        // Add Exceptions
+        // $this->generateFile(
+        //     "$basePath/Exceptions/handler.stub",
+        //     app_path("Exceptions/Handler.php"),
+        //     ""
+        // );
+
+        // $this->generateFile(
+        //     "$basePath/Exceptions/response.stub",
+        //     app_path("Exceptions/Response.php"),
+        //     ""
+        // );
+
+        $this->info("CRUD for $name generated successfully!");
+    }
+
+    protected function addModel($basePath, $name, $context)
+    {
         $this->generateFile(
             "$basePath/model.stub",
             app_path("Models/{$name}.php"),
-            compact('name', 'modelVariable', 'tableName')
+            $context
         );
+    }
 
-        // Controller
+    protected function addController($basePath, $name, $context)
+    {
         $this->generateFile(
             "$basePath/Repo_pattern/controller.stub",
             app_path("Http/Controllers/{$name}Controller.php"),
-            compact('name', 'modelVariable', 'tableName')
+            $context
         );
+    }
 
-
-        // Repositories
+    protected function addRepository($basePath, $name, $context)
+    {
         $folderPath = app_path('Http/Repositories');
 
         if (!file_exists($folderPath)) {
@@ -50,10 +91,12 @@ class MakeRepoCrud extends Command
         $this->generateFile(
             "$basePath/Repo_pattern/Repository.stub",
             "$folderPath/{$name}.php",
-            compact('name', 'modelVariable', 'tableName')
+            $context
         );
+    }
 
-        // Services
+    protected function addService($basePath, $name, $context)
+    {
         $folderPath = app_path('Http/Services');
 
         if (!file_exists($folderPath)) {
@@ -63,20 +106,23 @@ class MakeRepoCrud extends Command
         $this->generateFile(
             "$basePath/Repo_pattern/service.stub",
             "$folderPath/{$name}.php",
-            compact('name', 'modelVariable', 'tableName')
+            $context
         );
+    }
 
-        // Requests
+    protected function addRequest($basePath, $name, $context)
+    {
         $this->generateFile(
             "$basePath/requests.stub",
             app_path("Http/Requests/{$name}Request.php"),
-            compact('name', 'modelVariable', 'tableName')
+            $context
         );
+    }
 
-        // Add Route
-        $routeEntry = "Route::resource('$routeName', \\App\\Http\\Controllers\\{$name}Controller::class);";
-
+    protected function addAPIRoute($routeName)
+    {
         $file = base_path('routes/api.php');
+        $routeEntry = "Route::resource('$routeName', \App\Http\Controllers\{$routeName}Controller::class);";
 
         if(!Str::contains(File::get($file), $routeEntry)){
             File::append($file, "\n" . $routeEntry);
@@ -84,21 +130,6 @@ class MakeRepoCrud extends Command
         }else{
             $this->warn("Route is exist in api.php");
         }
-
-        // Add Exceptions
-        $this->generateFile(
-            "$basePath/Exceptions/handler.stub",
-            app_path("Exceptions/Handler.php"),
-            ""
-        );
-
-        $this->generateFile(
-            "$basePath/Exceptions/response.stub",
-            app_path("Exceptions/Response.php"),
-            ""
-        );
-
-        $this->info("CRUD for $name generated successfully!");
     }
 
     protected function generateFile($stubPath, $toPath, $replacements)
@@ -111,8 +142,8 @@ class MakeRepoCrud extends Command
         $stub = File::get($stubPath);
 
         $stub = str_replace(
-            ['{{modelName}}', '{{modelVariable}}', '{{tableName}}'],
-            [$replacements['name'], $replacements['modelVariable'], $replacements['tableName']],
+            ['{{modelName}}', '{{modelName}}', '{{tableName}}'],
+            [$replacements['name'], $replacements['modelName'], $replacements['tableName']],
             $stub
         );
 

@@ -7,35 +7,35 @@ use App\Repositories\{{modelName}}Repository;
 
 class {{modelName}}Service
 {
-    protected $repo;
+    protected ${{modelName}}Repository;
 
     public function __construct({{modelName}}Repository $repo)
     {
-        $this->repo = $repo;
+        $this->repository = $repository;
     }
 
     public function getAll{{modelName}}()
     {
-        return $this->repo->all();
+        return $this->repository->all();
     }
 
     public function get{{modelName}}($id)
     {
-        return $this->repo->find($id);
+        return $this->repository->find($id);
     }
 
     public function create{{modelName}}({{modelName}}RequestData $data)
     {
-        return $this->repo->create($data->toArray());
+        return $this->repository->create($data->toArray());
     }
 
     public function update{{modelName}}($id, {{modelName}}RequestData $data)
     {
-        return $this->repo->update($id, $data->toArray());
+        return $this->repository->update($id, $data->toArray());
     }
 
     public function delete{{modelName}}($id)
     {
-        return $this->repo->delete($id);
+        return $this->repository->delete($id);
     }
 }
