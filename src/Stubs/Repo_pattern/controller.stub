@@ -9,35 +9,35 @@ use App\Exceptions\Response;
 
 class {{modelName}}Controller extends Controller
 {
-    protected $service;
+    protected ${{modelName}}Service;
 
-    public function __construct({{modelName}}Service $service)
+    public function __construct({{modelName}}Service ${{modelName}}Service)
     {
-        $this->service = $service;
+        $this->{{modelName}}Service = ${{modelName}}Service;
     }
 
     public function index()
     {
-        $data = $this->service->index();
+        $data = $this->{{modelName}}Service->index();
     }
 
     public function store({{modelName}}Request $request)
     {
-        $data = $this->service->store($request);
+        $data = $this->{{modelName}}Service->store($request);
     }
 
-    public function show({{modelName}} ${{modelVariable}})
+    public function show({{modelName}} ${{modelName}})
     {
-        $data = $this->service->show(${{modelVariable}});
+        $data = $this->{{modelName}}Service->show(${{modelName}});
     }
 
     public function update({{modelName}}Request $request, $id)
     {
-        $data = $this->service->update($request, $id);
+        $data = $this->{{modelName}}Service->update($request, $id);
     }
 
     public function delete($id)
     {
-        $data = $this->service->delete($id);
+        $data = $this->{{modelName}}Service->delete($id);
     }
 }

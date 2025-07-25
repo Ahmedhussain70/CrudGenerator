@@ -46,13 +46,6 @@ class MakeRepoCrud extends Command
         // Add Route
         $this->addAPIRoute($routeName);
 
-        // Add Exceptions
-        // $this->generateFile(
-        //     "$basePath/Exceptions/handler.stub",
-        //     app_path("Exceptions/Handler.php"),
-        //     ""
-        // );
-
         // $this->generateFile(
         //     "$basePath/Exceptions/response.stub",
         //     app_path("Exceptions/Response.php"),
@@ -142,7 +135,7 @@ class MakeRepoCrud extends Command
         $stub = File::get($stubPath);
 
         $stub = str_replace(
-            ['{{modelName}}', '{{modelName}}', '{{tableName}}'],
+            ['{{name}}', '{{modelName}}', '{{tableName}}'],
             [$replacements['name'], $replacements['modelName'], $replacements['tableName']],
             $stub
         );
