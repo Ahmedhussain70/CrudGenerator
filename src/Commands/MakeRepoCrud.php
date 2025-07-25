@@ -105,9 +105,15 @@ class MakeRepoCrud extends Command
 
     protected function addRequest($basePath, $name, $context)
     {
+        $folderPath = app_path('Http/Requests');
+
+        if (!file_exists($folderPath)) {
+            mkdir($folderPath, 0777, true);
+        }
+
         $this->generateFile(
             "$basePath/requests.stub",
-            app_path("Http/Requests/{$name}Request.php"),
+            "$folderPath/{$name}Request.php",
             $context
         );
     }
