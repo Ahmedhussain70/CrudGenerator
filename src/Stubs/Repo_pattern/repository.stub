@@ -34,12 +34,12 @@ class {{modelName}}Repository
      */
     public function update(array $data, int $id)
     {
-        ${{modelName}} = {{modelName}}::find($id);
-        if (empty(${{modelName}})) {
+        ${{variableName}} = {{modelName}}::find($id);
+        if (empty(${{variableName}})) {
             return [];
         }
-        ${{modelName}}->update($data);
-        return ${{modelName}};
+        ${{variableName}}->update($data);
+        return ${{variableName}};
     }
     
     /**
@@ -49,11 +49,11 @@ class {{modelName}}Repository
      */
     public function delete($id)
     {
-        ${{modelName}} = {{modelName}}::find($id);
-        if (empty(${{modelName}})) {
+        ${{variableName}} = {{modelName}}::find($id);
+        if (empty(${{variableName}})) {
             return [];
         }
-        $disb{{modelName}}->delete();
-        return ${{modelName}};
+        ${{variableName}}->delete();
+        return ${{variableName}};
     }
 }

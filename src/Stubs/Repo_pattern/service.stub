@@ -7,11 +7,11 @@ use App\Repositories\{{modelName}}Repository;
 
 class {{modelName}}Service
 {
-    protected ${{modelName}}Repository;
+    protected ${{variableName}}Repository;
 
-    public function __construct({{modelName}}Repository $repo)
+    public function __construct({{modelName}}Repository ${{variableName}}Repository)
     {
-        $this->{{modelName}}Repository = ${{modelName}}Repository;
+        $this->{{modelName}}Repository = ${{variableName}}Repository;
     }
 
     public function getAll{{modelName}}()

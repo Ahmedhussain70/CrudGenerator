@@ -13,7 +13,8 @@ class MakeRepoCrud extends Command
     public function handle()
     {
         $name = Str::studly($this->argument('name'));
-        $modelName = Str::camel($name);
+        $modelName = Str::studly($name);
+        $variableName = Str::camel($name);
         $tableName = Str::snake(Str::pluralStudly($name));
         $routeName = Str::kebab(Str::pluralStudly($name));
         $viewFolder = $routeName;
@@ -26,7 +27,7 @@ class MakeRepoCrud extends Command
             $this->warn("Name is already exist");
         }
 
-        $context = compact('name', 'modelName', 'tableName', 'routeName', 'viewFolder');
+        $context = compact('name', 'modelName', 'variableName', 'tableName', 'routeName', 'viewFolder');
 
         // Model
         $this->addModel($basePath, $name, $context);
@@ -150,8 +151,8 @@ Route::prefix('$routeName')->group(function () {
         $stub = File::get($stubPath);
 
         $stub = str_replace(
-            ['{{name}}', '{{modelName}}', '{{tableName}}'],
-            [$replacements['name'], $replacements['modelName'], $replacements['tableName']],
+            ['{{name}}', '{{modelName}}', '{{variableName}}', '{{tableName}}'],
+            [$replacements['name'], $replacements['modelName'], $replacements['variableName'], $replacements['tableName']],
             $stub
         );
 

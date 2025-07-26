@@ -9,11 +9,11 @@ use App\Exceptions\Response;
 
 class {{modelName}}Controller extends Controller
 {
-    protected ${{modelName}}Service;
+    protected ${{variableName}}Service;
 
-    public function __construct({{modelName}}Service ${{modelName}}Service)
+    public function __construct({{modelName}}Service ${{variableName}}Service)
     {
-        $this->{{modelName}}Service = ${{modelName}}Service;
+        $this->{{modelName}}Service = ${{variableName}}Service;
     }
 
     public function index()
@@ -26,9 +26,9 @@ class {{modelName}}Controller extends Controller
         $data = $this->{{modelName}}Service->store($request);
     }
 
-    public function show({{modelName}} ${{modelName}})
+    public function show({{modelName}} ${{variableName}})
     {
-        $data = $this->{{modelName}}Service->show(${{modelName}});
+        $data = $this->{{modelName}}Service->show(${{variableName}});
     }
 
     public function update({{modelName}}Request $request, $id)
