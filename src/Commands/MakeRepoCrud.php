@@ -99,7 +99,7 @@ class MakeRepoCrud extends Command
 
         $this->generateFile(
             "$basePath/Repo_pattern/service.stub",
-            "$folderPath/{$name}.php",
+            "$folderPath/{$name}Service.php",
             $context
         );
     }
@@ -123,6 +123,9 @@ class MakeRepoCrud extends Command
     {
         $file = base_path('routes/api.php');
         // $routeEntry = "Route::resource('$routeName', \App\Http\Controllers\{$routeName}Controller::class);";
+
+        $use = "use App\Http\Controllers\\{$routeName}Controller;";
+
         $routeEntry = "
 Route::prefix('$routeName')->group(function () {
     Route::any('get', [$routeName::class, 'all']);
@@ -134,7 +137,8 @@ Route::prefix('$routeName')->group(function () {
         ";
 
         if (!Str::contains(File::get($file), $routeEntry)) {
-            File::append($file, "\n" . $routeEntry);
+            File::append($file, "\n\n" . $use . "\n" . $routeEntry);
+            // File::append($file, "\n" . $routeEntry);
             $this->info("Route added to api.php");
         } else {
             $this->warn("Route is exist in api.php");
