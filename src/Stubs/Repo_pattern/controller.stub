@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\{{modelName}};
 use App\Http\Requests\{{modelName}}Request;
-use App\Http\Services\{{modelName}}Service;
-use App\Exceptions\Response;
+use App\Services\{{modelName}}Service;
+use App\Http\Resources\{{modelName}}Resource;
 
 class {{modelName}}Controller extends Controller
 {
@@ -13,31 +13,37 @@ class {{modelName}}Controller extends Controller
 
     public function __construct({{modelName}}Service ${{variableName}}Service)
     {
-        $this->{{modelName}}Service = ${{variableName}}Service;
+        $this->{{variableName}}Service = ${{variableName}}Service;
     }
 
     public function index()
     {
-        $data = $this->{{modelName}}Service->index();
+        ${{variableName}} = $this->{{variableName}}Service->getAll{{modelName}}();
+        return success('success', 200, {{modelName}}Resource::collection(${{variableName}}));
+    }
+
+    public function show({{modelName}} ${{variableName}}_id)
+    {
+        ${{variableName}}  = $this->{{variableName}}Service->get{{variableName}}ById(${{variableName}}_id);
+        return success('success', 200, new {{modelName}}Resource(${{variableName}}));
     }
 
     public function store({{modelName}}Request $request)
     {
-        $data = $this->{{modelName}}Service->store($request);
+        ${{variableName}} = $this->{{variableName}}Service->create{{modelName}}($request->all());
+        return success('success', 201, new {{modelName}}Resource(${{variableName}}));
     }
 
-    public function show({{modelName}} ${{variableName}})
+
+    public function update({{modelName}}Request $request, ${{variableName}}id)
     {
-        $data = $this->{{modelName}}Service->show(${{variableName}});
+        ${{variableName}} = $this->{{variableName}}Service->update{{modelName}}($request->all(), ${{variableName}}id);
+        return success('success', 200, new {{modelName}}Resource(${{variableName}}));
     }
 
-    public function update({{modelName}}Request $request, $id)
+    public function delete(${{variableName}}id)
     {
-        $data = $this->{{modelName}}Service->update($request, $id);
-    }
-
-    public function delete($id)
-    {
-        $data = $this->{{modelName}}Service->delete($id);
+        ${{variableName}} = $this->{{variableName}}Service->delete{{modelName}}(${{variableName}}id);
+        return success('success', 200);
     }
 }

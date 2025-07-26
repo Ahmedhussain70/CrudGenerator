@@ -13,7 +13,7 @@ class {{modelName}}Repository
 
     public function find($id)
     {
-        return {{modelName}}::findOrFail($id);
+        return {{modelName}}::find($id);
     }
 
     /**
@@ -41,7 +41,7 @@ class {{modelName}}Repository
         ${{variableName}}->update($data);
         return ${{variableName}};
     }
-    
+
     /**
      * Summary of delete
      * @param int $id

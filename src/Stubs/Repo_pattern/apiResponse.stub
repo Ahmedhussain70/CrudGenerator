@@ -1,0 +1,40 @@
+<?php
+
+use Illuminate\Http\JsonResponse;
+
+
+function success(string $message = 'success', int $statusCode = 200, mixed $data = null): JsonResponse
+{
+    return _buildResponse($statusCode, $message, $data);
+}
+
+function error(string $message = 'error', int $statusCode = 400): JsonResponse
+{
+    return _buildResponse($statusCode, $message);
+}
+
+function validationError($errors, string $context = '', int $statusCode = 400): JsonResponse
+{
+    $message = $context
+        ? "The given data for {$context} is invalid."
+        : "The given data is invalid.";
+    return _buildResponse($statusCode, $message, null, $errors);
+}
+
+function _buildResponse(int $statusCode,string $message,mixed $data = null,$errors = null): JsonResponse 
+{
+    $response = [
+        'status' => $statusCode,
+        'message' => __($message),
+    ];
+
+    if (!is_null($data)) {
+        $response['data'] = $data;
+    }
+
+    if (!is_null($errors)) {
+        $response['errors'] = $errors;
+    }
+
+    return response()->json($response, $statusCode);
+}

@@ -16,7 +16,7 @@ class MakeRepoCrud extends Command
         $modelName = Str::studly($name);
         $variableName = Str::camel($name);
         $tableName = Str::snake(Str::pluralStudly($name));
-        $routeName = Str::kebab(Str::pluralStudly($name));
+        $routeName = Str::kebab(Str::studly($name));
         $viewFolder = $routeName;
 
         $this->info("Generating CRUD for: $name");
@@ -44,14 +44,14 @@ class MakeRepoCrud extends Command
         // Requests
         $this->addRequest($basePath, $name, $context);
 
-        // Add Route
-        $this->addAPIRoute($routeName);
+        // Resources
+        $this->addResource($basePath, $name, $context);
 
-        // $this->generateFile(
-        //     "$basePath/Exceptions/response.stub",
-        //     app_path("Exceptions/Response.php"),
-        //     ""
-        // );
+        // Add Route
+        $this->addAPIRoute($routeName, $modelName);
+
+        // Add API Response
+        $this->addApiResponse($basePath = 'vendor\ahmed-hussain70\crud-generator\src\Stubs\Repo_pattern\apiResponse.stub');
 
         $this->info("CRUD for $name generated successfully!");
     }
@@ -84,7 +84,7 @@ class MakeRepoCrud extends Command
 
         $this->generateFile(
             "$basePath/Repo_pattern/Repository.stub",
-            "$folderPath/{$name}.php",
+            "$folderPath/{$name}Repository.php",
             $context
         );
     }
@@ -119,30 +119,68 @@ class MakeRepoCrud extends Command
         );
     }
 
-    protected function addAPIRoute($routeName)
+    protected function addResource($basePath, $name, $context)
+    {
+        $folderPath = app_path('Http/Resources');
+
+        if (!file_exists($folderPath)) {
+            mkdir($folderPath, 0777, true);
+        }
+
+        $this->generateFile(
+            "$basePath/resource.stub",
+            app_path("Http/Resources/{$name}Resource.php"),
+            $context
+        );
+    }
+
+    protected function addAPIRoute($routeName, $modelName)
     {
         $file = base_path('routes/api.php');
-        // $routeEntry = "Route::resource('$routeName', \App\Http\Controllers\{$routeName}Controller::class);";
 
-        $use = "use App\Http\Controllers\\{$routeName}Controller;";
+        $useStatement = "use App\Http\Controllers\\{$modelName}Controller;";
 
         $routeEntry = "
 Route::prefix('$routeName')->group(function () {
-    Route::any('get', [$routeName::class, 'all']);
-    Route::any('add', [$routeName::class, 'store']);
-    Route::any('upd/{id}', [$routeName::class, 'update']);
-    Route::any('del/{id}', [$routeName::class, 'delete']);
-    Route::any('deps', [$routeName::class, 'deps']);
+    Route::get('/', [{$modelName}Controller::class, 'all']);
+    Route::post('/', [{$modelName}Controller::class, 'store']);
+    Route::put('/{id}', [{$modelName}Controller::class, 'update']);
+    Route::delete('/{id}', [{$modelName}Controller::class, 'delete']);
 });
         ";
 
-        if (!Str::contains(File::get($file), $routeEntry)) {
-            File::append($file, "\n\n" . $use . "\n" . $routeEntry);
-            // File::append($file, "\n" . $routeEntry);
-            $this->info("Route added to api.php");
-        } else {
-            $this->warn("Route is exist in api.php");
+        $fileContents = File::get($file);
+
+        if (!Str::contains($fileContents, $useStatement)) {
+            $fileContents = preg_replace(
+                '/<\?php\s*/',
+                "<?php\n\n$useStatement\n",
+                $fileContents,
+                1
+            );
         }
+
+        if (!Str::contains($fileContents, $routeEntry)) {
+            $fileContents .= "\n" . $routeEntry;
+            File::put($file, $fileContents);
+            $this->info("Route and use statement added to api.php");
+        } else {
+            $this->warn("Route already exists in api.php");
+        }
+    }
+
+    protected function addApiResponse($basePath)
+    {
+        $folderPath = app_path('Helpers');
+        if (!file_exists($folderPath)) {
+            mkdir($folderPath, 0777, true);
+        }
+
+        $this->generateFile(
+            "$basePath",
+            "$folderPath/ApiResponseHelper.php",
+            []
+        );
     }
 
     protected function generateFile($stubPath, $toPath, $replacements)
@@ -156,7 +194,7 @@ Route::prefix('$routeName')->group(function () {
 
         $stub = str_replace(
             ['{{name}}', '{{modelName}}', '{{variableName}}', '{{tableName}}'],
-            [$replacements['name'], $replacements['modelName'], $replacements['variableName'], $replacements['tableName']],
+            [$replacements['name'] ?? '', $replacements['modelName'] ?? '', $replacements['variableName'] ?? '', $replacements['tableName'] ?? ''],
             $stub
         );
 

@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\DTO\{{modelName}}RequestData;
 use App\Repositories\{{modelName}}Repository;
 
 class {{modelName}}Service
@@ -11,31 +10,31 @@ class {{modelName}}Service
 
     public function __construct({{modelName}}Repository ${{variableName}}Repository)
     {
-        $this->{{modelName}}Repository = ${{variableName}}Repository;
+        $this->{{variableName}}Repository = ${{variableName}}Repository;
     }
 
     public function getAll{{modelName}}()
     {
-        return $this->{{modelName}}Repository->all();
+        return $this->{{variableName}}Repository->all();
     }
 
-    public function get{{modelName}}($id)
+    public function get{{modelName}}ById($id)
     {
-        return $this->{{modelName}}Repository->find($id);
+        return $this->{{variableName}}Repository->find($id);
     }
 
-    public function create{{modelName}}({{modelName}}RequestData $data)
+    public function create{{modelName}}(array $data)
     {
-        return $this->{{modelName}}Repository->create($data->toArray());
+        return $this->{{variableName}}Repository->create($data->toArray());
     }
 
-    public function update{{modelName}}($id, {{modelName}}RequestData $data)
+    public function update{{modelName}}(array $data, int $id)
     {
-        return $this->{{modelName}}Repository->update($id, $data->toArray());
+        return $this->{{variableName}}Repository->update($id, $data->toArray());
     }
 
-    public function delete{{modelName}}($id)
+    public function delete{{modelName}}(int $id)
     {
-        return $this->{{modelName}}Repository->delete($id);
+        return $this->{{variableName}}Repository->delete($id);
     }
 }
