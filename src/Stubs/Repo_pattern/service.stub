@@ -11,31 +11,31 @@ class {{modelName}}Service
 
     public function __construct({{modelName}}Repository $repo)
     {
-        $this->repository = $repository;
+        $this->{{modelName}}Repository = ${{modelName}}Repository;
     }
 
     public function getAll{{modelName}}()
     {
-        return $this->repository->all();
+        return $this->{{modelName}}Repository->all();
     }
 
     public function get{{modelName}}($id)
     {
-        return $this->repository->find($id);
+        return $this->{{modelName}}Repository->find($id);
     }
 
     public function create{{modelName}}({{modelName}}RequestData $data)
     {
-        return $this->repository->create($data->toArray());
+        return $this->{{modelName}}Repository->create($data->toArray());
     }
 
     public function update{{modelName}}($id, {{modelName}}RequestData $data)
     {
-        return $this->repository->update($id, $data->toArray());
+        return $this->{{modelName}}Repository->update($id, $data->toArray());
     }
 
     public function delete{{modelName}}($id)
     {
-        return $this->repository->delete($id);
+        return $this->{{modelName}}Repository->delete($id);
     }
 }

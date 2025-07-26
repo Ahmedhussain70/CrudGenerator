@@ -2,36 +2,58 @@
 
 namespace App\Repositories;
 
-use App\Models\{{modelName}}Model;
+use App\Models\{{modelName}};
 
 class {{modelName}}Repository
 {
     public function all()
     {
-        return {{modelName}}Model::all();
+        return {{modelName}}::all();
     }
 
     public function find($id)
     {
-        return {{modelName}}Model::findOrFail($id);
+        return {{modelName}}::findOrFail($id);
     }
 
+    /**
+     * Summary of create
+     * @param array $data
+     * @return {{modelName}}
+     */
     public function create(array $data)
     {
-        return {{modelName}}Model::create($data);
+        return {{modelName}}::create($data);
     }
 
-    public function update($id, array $data)
+    /**
+     * Summary of update
+     * @param array $data
+     * @param int $id
+     * @return array|{{modelName}}|\Illuminate\Database\Eloquent\Builder<{{modelName}}>
+     */
+    public function update(array $data, int $id)
     {
-        ${{modelVariable}} = $this->find($id);
-        ${{modelVariable}}->update(array_merge($data, ['updated_at' => now()]));
-        return ${{modelVariable}};
+        ${{modelName}} = {{modelName}}::find($id);
+        if (empty(${{modelName}})) {
+            return [];
+        }
+        ${{modelName}}->update($data);
+        return ${{modelName}};
     }
-
+    
+    /**
+     * Summary of delete
+     * @param int $id
+     * @return array|{{modelName}}|\Illuminate\Database\Eloquent\Builder<{{modelName}}>
+     */
     public function delete($id)
     {
-        ${{modelVariable}} = $this->find($id);
-
-        return ${{modelVariable}}->delete();
+        ${{modelName}} = {{modelName}}::find($id);
+        if (empty(${{modelName}})) {
+            return [];
+        }
+        $disb{{modelName}}->delete();
+        return ${{modelName}};
     }
 }

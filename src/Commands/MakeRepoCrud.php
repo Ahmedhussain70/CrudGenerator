@@ -123,13 +123,13 @@ class MakeRepoCrud extends Command
         $file = base_path('routes/api.php');
         // $routeEntry = "Route::resource('$routeName', \App\Http\Controllers\{$routeName}Controller::class);";
         $routeEntry = "
-                Route::prefix('$routeName')->group(function () {
-                Route::any('get', [$routeName::class, 'all']);
-                Route::any('add', [$routeName::class, 'store']);
-                Route::any('upd/{id}', [$routeName::class, 'update']);
-                Route::any('del/{id}', [$routeName::class, 'delete']);
-                Route::any('deps', [$routeName::class, 'deps']);
-            });
+Route::prefix('$routeName')->group(function () {
+    Route::any('get', [$routeName::class, 'all']);
+    Route::any('add', [$routeName::class, 'store']);
+    Route::any('upd/{id}', [$routeName::class, 'update']);
+    Route::any('del/{id}', [$routeName::class, 'delete']);
+    Route::any('deps', [$routeName::class, 'deps']);
+});
         ";
 
         if (!Str::contains(File::get($file), $routeEntry)) {
