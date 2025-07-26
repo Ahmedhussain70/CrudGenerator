@@ -11,4 +11,16 @@ class {{modelName}} extends Model
     protected $fillable = [
         // Add your fillable fields here
     ];
+
+    public $list = [
+        // Add your listable fields here
+    ];
+
+    public $show = [
+        // Add your showable fields here
+    ];
+
+    public $search = [
+        // Add your searchable fields here
+    ];
 }
