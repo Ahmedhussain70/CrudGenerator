@@ -45,13 +45,13 @@ class MakeRepoCrud extends Command
         $this->addRequest($basePath, $name, $context);
 
         // Resources
-        $this->addResource($basePath, $name, $context);
+        $this->addResource($basePath = 'vendor\ahmed-hussain70\crud-generator\src\Stubs\Repo_pattern', $name, $context);
 
         // Add Route
         $this->addAPIRoute($routeName, $modelName);
 
         // Add API Response
-        $this->addApiResponse($basePath = 'vendor\ahmed-hussain70\crud-generator\src\Stubs\Repo_pattern\apiResponse.stub');
+        $this->addApiResponse($basePath = 'vendor\ahmed-hussain70\crud-generator\src\Stubs\Repo_pattern');
 
         $this->info("CRUD for $name generated successfully!");
     }
@@ -177,7 +177,7 @@ Route::prefix('$routeName')->group(function () {
         }
 
         $this->generateFile(
-            "$basePath",
+            "$basePath/apiResponse.stub",
             "$folderPath/ApiResponseHelper.php",
             []
         );
