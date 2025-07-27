@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\{{modelName}};
-use App\Http\Requests\{{modelName}}Request;
+use App\Http\Requests\Store{{modelName}}Request;
+use App\Http\Requests\Update{{modelName}}Request;
 use App\Services\{{modelName}}Service;
 use App\Http\Resources\{{modelName}}Resource;
 
@@ -28,14 +29,14 @@ class {{modelName}}Controller extends Controller
         return success('success', 200, new {{modelName}}Resource(${{variableName}}));
     }
 
-    public function store({{modelName}}Request $request)
+    public function store(Store{{modelName}}Request $request)
     {
         ${{variableName}} = $this->{{variableName}}Service->create{{modelName}}($request->all());
         return success('success', 201, new {{modelName}}Resource(${{variableName}}));
     }
 
 
-    public function update({{modelName}}Request $request, ${{variableName}}id)
+    public function update(Update{{modelName}}Request $request, ${{variableName}}id)
     {
         ${{variableName}} = $this->{{variableName}}Service->update{{modelName}}($request->all(), ${{variableName}}id);
         return success('success', 200, new {{modelName}}Resource(${{variableName}}));
