@@ -229,12 +229,10 @@ Route::prefix('$routeName')->group(function () {
         $useUpdateRequest = "use App\\Http\\Requests\\Update{$name}Request;";
         $useModel = "use App\\Models\\{$name};";
 
-        // Ensure directory exists
         if (!file_exists(dirname($filePath))) {
             mkdir(dirname($filePath), 0777, true);
         }
 
-        // If file does not exist, create basic controller structure
         if (!file_exists($filePath)) {
             $template = <<<PHP
 <?php
@@ -243,7 +241,7 @@ namespace App\Http\Controllers;
 
 class MetaController extends Controller
 {
-    public static function metadataMap(): array
+    public function getMetaByModel(\$model)
     {
         return [
         ];
@@ -254,24 +252,29 @@ PHP;
             File::put($filePath, $template);
         }
 
-        // Load file contents
         $fileContents = File::get($filePath);
 
-        // Insert use statements after <?php if not already present
-        $uses = [$useModel, $useCreateRequest, $useUpdateRequest];
-        foreach ($uses as $use) {
+        // Insert use statements if not already present
+        $allUses = [$useModel, $useCreateRequest, $useUpdateRequest];
+        foreach ($allUses as $use) {
             if (!Str::contains($fileContents, $use)) {
-                $fileContents = preg_replace('/<\?php\s*/', "<?php\n{$use}\n", $fileContents, 1);
+                // Insert after namespace (only once)
+                $fileContents = preg_replace(
+                    '/(namespace\s+App\\\Http\\\Controllers;\s*)/',
+                    "$1$use\n",
+                    $fileContents,
+                    1
+                );
             }
         }
 
-        // Add metadata line inside metadataMap() method
+        // Add line entry to getMetaByModel method's return array
         $lineEntry = "            '{$name}' => {$name}::metadata(new Store{$name}Request(), new Update{$name}Request()),";
 
         if (!Str::contains($fileContents, $lineEntry)) {
             $fileContents = preg_replace(
-                '/(return\s*\[\s*)([^]]*)/s',
-                "\$1\n{$lineEntry},\n\$2",
+                '/return\s*\[\s*/',
+                "return [\n$lineEntry\n]",
                 $fileContents
             );
             File::put($filePath, $fileContents);
@@ -280,7 +283,6 @@ PHP;
             $this->warn("Metadata entry already exists in MetaController.php");
         }
     }
-
 
     protected function generateFile($stubPath, $toPath, $replacements)
     {
