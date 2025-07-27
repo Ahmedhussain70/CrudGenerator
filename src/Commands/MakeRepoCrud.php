@@ -53,6 +53,9 @@ class MakeRepoCrud extends Command
         // Add API Response
         $this->addApiResponse($basePath = 'vendor\ahmed-hussain70\crud-generator\src\Stubs\Repo_pattern');
 
+        // Add Meta Controller
+        $this->addMetaController($name);
+
         $this->info("CRUD for $name generated successfully!");
     }
 
@@ -104,6 +107,27 @@ class MakeRepoCrud extends Command
         );
     }
 
+    // protected function addRequest($basePath, $name, $context)
+    // {
+    //     $folderPath = app_path('Http/Requests');
+
+    //     if (!file_exists($folderPath)) {
+    //         mkdir($folderPath, 0777, true);
+    //     }
+
+    //     $this->generateFile(
+    //         "$basePath/requests.stub",
+    //         "$folderPath/Store{$name}Request.php",
+    //         $context
+    //     );
+
+    //     $this->generateFile(
+    //         "$basePath/requests.stub",
+    //         "$folderPath/Update{$name}Request.php",
+    //         $context
+    //     );
+    // }
+
     protected function addRequest($basePath, $name, $context)
     {
         $folderPath = app_path('Http/Requests');
@@ -112,10 +136,24 @@ class MakeRepoCrud extends Command
             mkdir($folderPath, 0777, true);
         }
 
+        // Add class_name to context for Store
+        $storeContext = array_merge($context, [
+            'class_name' => "Store{$name}Request"
+        ]);
         $this->generateFile(
             "$basePath/requests.stub",
-            "$folderPath/{$name}Request.php",
-            $context
+            "$folderPath/Store{$name}Request.php",
+            $storeContext
+        );
+
+        // Add class_name to context for Update
+        $updateContext = array_merge($context, [
+            'class_name' => "Update{$name}Request"
+        ]);
+        $this->generateFile(
+            "$basePath/requests.stub",
+            "$folderPath/Update{$name}Request.php",
+            $updateContext
         );
     }
 
@@ -183,6 +221,67 @@ Route::prefix('$routeName')->group(function () {
         );
     }
 
+    protected function addMetaController($name)
+    {
+        $filePath = app_path('Http/Controllers/MetaController.php');
+
+        $useCreateRequest = "use App\\Http\\Requests\\Store{$name}Request;";
+        $useUpdateRequest = "use App\\Http\\Requests\\Update{$name}Request;";
+        $useModel = "use App\\Models\\{$name};";
+
+        // Ensure directory exists
+        if (!file_exists(dirname($filePath))) {
+            mkdir(dirname($filePath), 0777, true);
+        }
+
+        // If file does not exist, create basic controller structure
+        if (!file_exists($filePath)) {
+            $template = <<<PHP
+<?php
+
+namespace App\Http\Controllers;
+
+class MetaController extends Controller
+{
+    public static function metadataMap(): array
+    {
+        return [
+        ];
+    }
+}
+
+PHP;
+            File::put($filePath, $template);
+        }
+
+        // Load file contents
+        $fileContents = File::get($filePath);
+
+        // Insert use statements after <?php if not already present
+        $uses = [$useModel, $useCreateRequest, $useUpdateRequest];
+        foreach ($uses as $use) {
+            if (!Str::contains($fileContents, $use)) {
+                $fileContents = preg_replace('/<\?php\s*/', "<?php\n{$use}\n", $fileContents, 1);
+            }
+        }
+
+        // Add metadata line inside metadataMap() method
+        $lineEntry = "            '{$name}' => {$name}::metadata(new Store{$name}Request(), new Update{$name}Request()),";
+
+        if (!Str::contains($fileContents, $lineEntry)) {
+            $fileContents = preg_replace(
+                '/(return\s*\[\s*)([^]]*)/s',
+                "\$1\n{$lineEntry},\n\$2",
+                $fileContents
+            );
+            File::put($filePath, $fileContents);
+            $this->info("Metadata entry and use statements added to MetaController.php");
+        } else {
+            $this->warn("Metadata entry already exists in MetaController.php");
+        }
+    }
+
+
     protected function generateFile($stubPath, $toPath, $replacements)
     {
         if (!File::exists($stubPath)) {
@@ -193,8 +292,8 @@ Route::prefix('$routeName')->group(function () {
         $stub = File::get($stubPath);
 
         $stub = str_replace(
-            ['{{name}}', '{{modelName}}', '{{variableName}}', '{{tableName}}'],
-            [$replacements['name'] ?? '', $replacements['modelName'] ?? '', $replacements['variableName'] ?? '', $replacements['tableName'] ?? ''],
+            ['{{name}}', '{{modelName}}', '{{variableName}}', '{{tableName}}', '{{class_name}}'],
+            [$replacements['name'] ?? '', $replacements['modelName'] ?? '', $replacements['variableName'] ?? '', $replacements['tableName'] ?? '', $replacements['class_name'] ?? ''],
             $stub
         );
 
