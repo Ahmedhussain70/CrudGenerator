@@ -274,7 +274,7 @@ PHP;
         if (!Str::contains($fileContents, $lineEntry)) {
             $fileContents = preg_replace(
                 '/return\s*\[\s*/',
-                "return [\n$lineEntry\n]",
+                "return [\n$lineEntry\n",
                 $fileContents
             );
             File::put($filePath, $fileContents);
